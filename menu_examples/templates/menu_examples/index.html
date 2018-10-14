@@ -1,0 +1,20 @@
+<html>
+    <head>
+    </head>
+    <body>
+        <img src="https://career.ru/employer-logo/1775063.png"></img>
+        <h2>
+            All menus:
+        </h2>
+        {% for menu in menus %}
+        <div>
+            <h3>
+                {{menu.name}}
+            </h3>
+            <a href="{{menu.root_item.explicit_url}}">
+                {{menu.root_item.name}}
+            </a>
+        </div>
+        {% endfor %}
+    </body>
+</html>

@@ -1,0 +1,76 @@
+<p>{{menu.name}} menu</p>
+
+<style>
+    .clt, .clt ul, .clt li {
+     position: relative;
+}
+
+.clt ul {
+    list-style: none;
+    padding-left: 32px;
+}
+
+.clt li::before, .clt li::after {
+    content: "";
+    position: absolute;
+    left: -12px;
+}
+
+.clt li::before {
+    border-top: 1px solid #000;
+    top: 9px;
+    width: 8px;
+    height: 0;
+}
+
+.clt li::after {
+    border-left: 1px solid #000;
+    height: 100%;
+    width: 0px;
+    top: 2px;
+}
+
+.clt ul > li:last-child::after {
+    height: 8px;
+}n
+</style>
+
+
+
+<div class="clt" id="draw_menu_{{menus.name}}"></div>
+
+<script>
+  var tree = {{active_path | safe}};
+
+
+  function write_tree(tree_json_object, div_id) {
+    var root_ul_element = get_ul_element_tree_node(tree_json_object.tree, tree_json_object.root)
+    var menu_div = document.getElementById(div_id);
+    menu_div.appendChild(root_ul_element);
+  }
+
+  function get_ul_element_tree_node(tree_json_object, node_id) {
+    var ul_element = document.createElement("ul");
+    var key;
+    for (child_node_index in tree_json_object[node_id]) {
+      child_node_id = tree_json_object[node_id][child_node_index].id;
+      var li_element = document.createElement("li");
+      var a_element = document.createElement("a");
+      a_element.setAttribute('href', tree_json_object[node_id][child_node_index].explicit_url);
+      var node = document.createTextNode(tree_json_object[node_id][child_node_index].name);
+      a_element.appendChild(node);
+      li_element.appendChild(a_element);
+      if (child_node_id in tree_json_object) {
+        child_ul_element = get_ul_element_tree_node(tree_json_object, child_node_id);
+        li_element.appendChild(child_ul_element);
+      };
+      ul_element.appendChild(li_element);
+    }
+    return ul_element;
+  }
+
+ write_tree(tree, "draw_menu_{{menus.name}}");
+
+
+
+</script>
